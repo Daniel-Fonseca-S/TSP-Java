@@ -129,7 +129,7 @@ public class TSPSolver {
         return updatedPopulation;
     }
 
-    public static void main(
+    public static void mainTSPSolver(
             long execTime,
             double mutProb,
             Integer populSize,
@@ -158,7 +158,7 @@ public class TSPSolver {
             Tour finalWorstTour1 = getWorstTour(population);
             population = selectSecondWorst(population, finalWorstTour1);
             Tour finalWorstTour2 = getWorstTour(population);
-            Object[] pathsPMX = PMX.main(citiesNumber, finalWorstTour1.path, finalWorstTour2.path, mutationProb);
+            Object[] pathsPMX = PMX.mainPMX(citiesNumber, finalWorstTour1.path, finalWorstTour2.path, mutationProb);
 
             double fitnessPMX1 = AJE.calcPath((int[]) pathsPMX[0]);
             double fitnessPMX2 = AJE.calcPath((int[]) pathsPMX[1]);

@@ -3,7 +3,7 @@ package libs;
 import java.util.Random;
 
 public class PMX {
-    public static Object[] main(
+    public static Object[] mainPMX(
             Integer numberOfCities,
             int[] path1,
             int[] path2,

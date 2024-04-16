@@ -25,7 +25,7 @@ public class ThreadToRun extends Thread{
         long startTime = System.nanoTime();
         long timeToExec = (long) (timePerThread * 1_000_000_000L);
         for (int i = 1; i <= 1_000_000_000; i++) {
-            TSPSolver.main(
+            TSPSolver.mainTSPSolver(
                     (long) timePerThread,
                     mutationProb,
                     populationSize,
