@@ -1,7 +1,7 @@
 package libs;
 
 public class ThreadToRun extends Thread{
-    private double timePerThread;
+    private final double timePerThread;
     private static double mutationProb;
     private static Integer populationSize;
     private static Integer citiesNumber;
@@ -15,10 +15,10 @@ public class ThreadToRun extends Thread{
             Integer[][] matrixReceive
     ) {
         this.timePerThread = timePerThread;
-        this.mutationProb = mutProb;
-        this.populationSize = populSize;
-        this.citiesNumber = citSize;
-        this.matrix = matrixReceive;
+        mutationProb = mutProb;
+        populationSize = populSize;
+        citiesNumber = citSize;
+        matrix = matrixReceive;
     }
 
     public void run() {
@@ -50,32 +50,32 @@ public class ThreadToRun extends Thread{
     private static Integer iterationsFinal;
     private static long timeFinal;
 
-    public static double setBestDistanceFinal(double bDistance) {
-        return bestDistanceFinal = bDistance;
+    public static void setBestDistanceFinal(double bDistance) {
+        bestDistanceFinal = bDistance;
     }
 
     public static double getBestDistanceFinal() {
         return bestDistanceFinal;
     }
 
-    public static int[] setBestPathFinal(int[] bPath) {
-        return bestPathFinal = bPath;
+    public static void setBestPathFinal(int[] bPath) {
+        bestPathFinal = bPath;
     }
 
     public static int[] getBestPathFinal() {
         return bestPathFinal;
     }
 
-    public static Integer setIterationsFinal(Integer it) {
-        return iterationsFinal = it;
+    public static void setIterationsFinal(Integer it) {
+        iterationsFinal = it;
     }
 
     public static Integer getIterationsFinal() {
         return iterationsFinal;
     }
 
-    public static long setFormattedTimeFinal(long timeFinalInsert) {
-        return timeFinal = timeFinalInsert;
+    public static void setFormattedTimeFinal(long timeFinalInsert) {
+        timeFinal = timeFinalInsert;
     }
 
     public static long getFormattedTimeFinal() {

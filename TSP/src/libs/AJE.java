@@ -20,7 +20,7 @@ public class AJE {
 
 
     public static void readFromFile(String fileName) {
-        filePathToShow = "files/" + fileName;
+        filePathToShow = "TSP/files/" + fileName;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePathToShow))) {
             String line;
             boolean isFirstLine = true;
@@ -47,8 +47,7 @@ public class AJE {
 
         List<String> lineDivided = List.of(line.split("\\s+"));
         List<Integer> newNumberArray = new ArrayList<>();
-        for (int i = 0; i < lineDivided.size(); i++) {
-            String element = lineDivided.get(i);
+        for (String element : lineDivided) {
             try {
                 Integer.parseInt(element);
                 newNumberArray.add(Integer.parseInt(element));
@@ -140,7 +139,6 @@ public class AJE {
             Integer populationNumber
     ) {
         long startTime = System.nanoTime();
-        ThreadToRun bestThread = null;
         double bestDistance = Integer.MAX_VALUE;
         ThreadToRun[] threads = new ThreadToRun[threadsNumber];
         for (int i = 0; i < threadsNumber; i++) {
@@ -174,17 +172,16 @@ public class AJE {
 
         final long execTimeTotal = System.nanoTime() - startTime;
         String formattedTime = new DecimalFormat("#0.000").format(((double) execTimeTotal / 1_000_000_000));
-        final long timeToFormat = bestThread.getFormattedTimeFinal();
+        final long timeToFormat = ThreadToRun.getFormattedTimeFinal();
         String formattedTimeExec = new DecimalFormat("#0.000000").format((double) timeToFormat / 1_000_000_000);
         for (int i = 0; i < threadsNumber; i++) {
-            if (bestDistance > threads[i].getBestDistanceFinal()) {
-                bestThread = threads[i];
-                bestDistance = threads[i].getBestDistanceFinal();
+            if (bestDistance > ThreadToRun.getBestDistanceFinal()) {
+                break;
             }
         }
 
-        bestDistances.add(bestThread.getBestDistanceFinal());
-        bestTimes.add(bestThread.getFormattedTimeFinal());
+        bestDistances.add(ThreadToRun.getBestDistanceFinal());
+        bestTimes.add(ThreadToRun.getFormattedTimeFinal());
 
         System.out.println(
                 String.format("%2d", (testNumber + 1)) + "  " +
@@ -192,10 +189,10 @@ public class AJE {
                 filePathToShow + "  " +
                 threadsNumber + "\t\t" +
                 formattedTime + "  " +
-                (int) bestThread.getBestDistanceFinal() + "\t\t\t " +
-                bestThread.getIterationsFinal() + "\t\t" +
+                (int) ThreadToRun.getBestDistanceFinal() + "\t\t\t " +
+                ThreadToRun.getIterationsFinal() + "\t\t" +
                 formattedTimeExec + "\t- " +
-                Arrays.toString(bestThread.getBestPathFinal())
+                Arrays.toString(ThreadToRun.getBestPathFinal())
         );
 
         for (int i = 0; i < threadsNumber; i++) {
@@ -247,7 +244,7 @@ public class AJE {
         }
         long sum = 0;
         for (double number : array) {
-            sum += number;
+            sum += (long) number;
         }
         return (double) sum / array.size();
     }

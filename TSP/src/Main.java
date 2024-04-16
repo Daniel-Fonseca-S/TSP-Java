@@ -34,7 +34,7 @@ public class Main {
             return "over";
         }
 
-        if (params.length == 5 && Float.valueOf(params[4]) <= 1) {
+        if (params.length == 5 && Float.parseFloat(params[4]) <= 1) {
             fileName = params[0];
             threadsNumber = Integer.valueOf(params[1]);
             execTime = Integer.valueOf(params[2]);

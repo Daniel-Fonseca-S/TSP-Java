@@ -189,29 +189,29 @@ public class TSPSolver {
         setTime(execTimeFound);
     }
 
-    public static long setTime(long time) {
-        return execTimeFound = time;
+    public static void setTime(long time) {
+        execTimeFound = time;
     }
     public static long getTime() {
         return execTimeFound;
     }
 
-    public static Integer setIterations(Integer it) {
-        return iterations = it;
+    public static void setIterations(Integer it) {
+        iterations = it;
     }
     public static Integer getIterations() {
         return iterations;
     }
 
-    public static double setBestDistance(double bDistance) {
-        return bestDistance = bDistance;
+    public static void setBestDistance(double bDistance) {
+        bestDistance = bDistance;
     }
     public static double getBestDistance() {
         return bestDistance;
     }
 
-    public static int[] setBestPath(int[] bPath) {
-        return bestPath = bPath;
+    public static void setBestPath(int[] bPath) {
+        bestPath = bPath;
     }
     public static int[] getBestPath() {
         return bestPath;

@@ -13,12 +13,10 @@ public class PMX {
         int[] offSpring1 = new int[n];
         int[] offSpring2 = new int[n];
 
-        double mutationProbability = mutationProb;
-
         Random rand = new Random();
         pmxCrossover(path1, path2,offSpring1,offSpring2,n,rand);
-        mutate(offSpring1, mutationProbability, rand);
-        mutate(offSpring2, mutationProbability, rand);
+        mutate(offSpring1, mutationProb, rand);
+        mutate(offSpring2, mutationProb, rand);
 
         return new Object[] {offSpring1, offSpring2};
     }
