@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AJE {
     private static Integer citiesNumber;
@@ -113,9 +114,9 @@ public class AJE {
     private static ArrayList<Double> bestDistances = new ArrayList<>();
     private static ArrayList<Long> bestTimes = new ArrayList<>();
 
-    public static void start(Float mutationProb, Integer populationNumber, Integer execTime, Integer threadsNumber, long startTime) {
+    public static void start(float mutationProb, Integer populationNumber, Integer execTime, Integer threadsNumber, long startTime) {
         System.out.println("\n--== Calculate Paths ==--");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             calc(i, threadsNumber, execTime, mutationProb, populationNumber);
         }
 
@@ -129,6 +130,9 @@ public class AJE {
 
         String formattedTimeExec = new DecimalFormat("#0.000").format((double) (System.nanoTime() - startTime) / 1_000_000_000);
         System.out.println("\nProgram runned in " + formattedTimeExec + " seconds");
+        List<Integer> matrixList = Arrays.stream(matrix).flatMap(Arrays::stream).collect(Collectors.toList());
+        ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, 30, threadsNumber, mutationProb, count);
+        ReportGenerator.generateReport();
     }
 
     private static void calc(
@@ -200,6 +204,13 @@ public class AJE {
                 threads[i].interrupt();
             }
         }
+        ReportGenerator.addConvergedInfo(
+                (int) ThreadToRun.getBestDistanceFinal(),
+                (double) timeToFormat / 1_000_000_000,
+                Arrays.stream(ThreadToRun.getBestPathFinal()).boxed().collect(Collectors.toList()),
+                0,
+                ThreadToRun.getIterationsFinal()
+        );
     }
 
     //-------------

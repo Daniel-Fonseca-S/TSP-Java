@@ -8,7 +8,7 @@ public class Main {
     private static Integer threadsNumber;
     private static Integer execTime;
     private static Integer populationNumber;
-    private static Float mutationProb;
+    private static float mutationProb;
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -39,7 +39,7 @@ public class Main {
             threadsNumber = Integer.valueOf(params[1]);
             execTime = Integer.valueOf(params[2]);
             populationNumber = Integer.valueOf(params[3]);
-            mutationProb = Float.valueOf(params[4]);
+            mutationProb = Float.parseFloat(params[4]);
 
             startProgram();
 
