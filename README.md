@@ -1,14 +1,21 @@
 # TSP - Traveling Salesman Problem Solver (Java)
 
-**SDK:** Oracle OpenJDK version **21.0.1**
-
-- Make sure to ⭐️ the repository to stay tuned! 
-
 ## Overview 🔍
 
 This Java-based project aims to solve the **Traveling Salesman Problem (TSP)** using a parallelized approach with multithreading and the Partially Mapped Crossover (PMX) technique. The TSP is a classic optimization problem where the goal is to find the most efficient route that visits a set of cities exactly once and returns to the starting city.
 
-![TSP](./assets/tsp.jpg)
+---
+
+## Fork objectives 🚀
+
+The main goal of this fork is to adapt the original project to bea able to generate reports for a performance analysis between parallel capabilities in different programming languages. The main goal is to compare the performance of the Java version with the Python version.
+
+---
+
+## How to run? 🏃
+
+To run the project, you need to have Java SDK 21 installed on your machine. You can download it [here](https://www.oracle.com/java/technologies/downloads/#java21).
+After that, you can run the main class ```Main.java```.
 
 ---
 
@@ -38,10 +45,10 @@ To control the execution time of the algorithm, a maximum time parameter is prov
 
 ## Showcase 🔭
 
-|                                         |                                            |
-|               :---:                     |                 :---:                      |
-| ![Start](./assets/showcase/1.png)       | ![Choice1](./assets/showcase/3.png)        |
-| ![Start](./assets/showcase/2.png)       | ![Choice1](./assets/showcase/4.png)        |
+|                                   |                                     |
+|:---------------------------------:|:-----------------------------------:|
+| ![Start](./assets/showcase/1.png) | ![Choice1](./assets/showcase/3.png) |
+| ![Start](./assets/showcase/2.png) | ![Choice1](./assets/showcase/4.png) |
 
 ---
 
@@ -50,13 +57,14 @@ To control the execution time of the algorithm, a maximum time parameter is prov
 ### Parameters
 
 To execute the TSP solver you need to fill the following parameters:
-|   Param   | Example |  |
-|   :---:   |  :---:  |  :---:  | 
-|  ```fileName``` | ex13.txt | Already gets from "files" folder, just put the file name |
-|  ```threadsNumber``` | 4 | |
-|  ```maxExecTime```  | 60 | in seconds |
-|  ```populationNumber``` | 100 | |
-|  ```mutationProbability``` | 0.01 | from 0.01 to 1 |
+
+|           Param           | Example  |                       Description                        |
+|:-------------------------:|:--------:|:--------------------------------------------------------:| 
+|      ```fileName```       | ex13.txt | Already gets from "files" folder, just put the file name |
+|    ```threadsNumber```    |    4     |                                                          |
+|     ```maxExecTime```     |    60    |                        in seconds                        |
+|  ```populationNumber```   |   100    |                                                          |
+| ```mutationProbability``` |   0.01   |                      from 0.01 to 1                      |
 
 Final Result:
 ```Java
@@ -68,65 +76,33 @@ Example
 ```
 
 ### Results
-| File      |     Best distance   |
-| :---:     | :---: |
-| ex5       |    21 |
-| ex6       |    23 |
-| ex7       |   105 |
-| ex8       |   244 |
-| ex9       |  1472 |
-| ex10      |   413 |
-| sp11      |   133 |
-| uk12      |  1733 |
-| ex13      |  3158 |
-| burma14   |  3323 |
-| lau15     |   291 |
-| ulysses16 |  6859 |
-| gr17      |  2085 |
-| ulysses22 |  7013 |
-| gr24      |  1272 |
-| fri26     |   937 |
-| dantzig42 |   699 |
-| att48     | 33523 |
+|   File    | Best distance |
+|:---------:|:-------------:|
+|    ex5    |      21       |
+|    ex6    |      23       |
+|    ex7    |      105      |
+|    ex8    |      244      |
+|    ex9    |     1472      |
+|   ex10    |      413      |
+|   sp11    |      133      |
+|   uk12    |     1733      |
+|   ex13    |     3158      |
+|  burma14  |     3323      |
+|   lau15   |      291      |
+| ulysses16 |     6859      |
+|   gr17    |     2085      |
+| ulysses22 |     7013      |
+|   gr24    |     1272      |
+|   fri26   |      937      |
+| dantzig42 |      699      |
+|   att48   |     33523     |
 
 
 ---
 
-## Why to Open Source 🌐
+## Author 🤝
 
-1. **Community Collaboration**: Open sourcing your project invites a global community of developers to contribute, share ideas, and enhance its capabilities.
-
-2. **Accelerated Development**: With a collective effort, open source projects progress faster, benefiting from diverse skill sets and constant feedback.
-
-3. **Transparency and Trust**: Open source builds trust by allowing users to inspect code, ensuring security and transparency in software.
-
-4. **Cost Efficiency**: It reduces development costs as contributors volunteer their time and resources, making it an economical choice.
-
-5. **Longevity**: Open source projects tend to have longer lifespans, as they are not reliant on a single entity, ensuring sustainability.
-
----
-
-## Tech Stack ⚡
-
-![Java](https://img.shields.io/badge/Java-F89820?style=for-the-badge)
-![IntelliJ-IDEA](https://img.shields.io/badge/IntelliJ%20IDEA-000000.svg?style=for-the-badge&logo=intellijidea&logoColor=white)
-
----
-
-## Installation 📥
-
-> Install TSP Repository with npm *(This will install all files, including this README.md)*
->
-> ```bash
->  npm install https://github.com/MiguelRolo/TSP.git
->  cd TSP
-> ```
-
----
-
-## Contribution 🤝
-
-> Feel free to contribute by forking the repository and creating pull requests. Bug reports and feature requests are also welcome in the Issues section.
+> This project was forked from Miguel Rolo's TSP project and adapted by me.
 
 ---
 
