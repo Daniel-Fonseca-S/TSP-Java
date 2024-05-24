@@ -43,8 +43,6 @@ public class ThreadToRun extends Thread{
         setFormattedTimeFinal(TSPSolver.getTime());
     }
 
-    //-----------
-
     private static double bestDistanceFinal;
     private static int[] bestPathFinal;
     private static Integer iterationsFinal;

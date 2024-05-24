@@ -52,9 +52,7 @@ public class AJE {
             try {
                 Integer.parseInt(element);
                 newNumberArray.add(Integer.parseInt(element));
-            } catch (NumberFormatException e) {
-                //Ignore it
-            }
+            } catch (NumberFormatException ignored) {}
         }
 
         for (int x = 0; x < newNumberArray.size(); x++) {
@@ -75,8 +73,6 @@ public class AJE {
             System.out.println();
         }
     }
-
-    //-------
 
     public static int[] generatePath() {
         int[] path = new int[citiesNumber];
@@ -108,8 +104,6 @@ public class AJE {
         }
         return valueOfPath;
     }
-
-    //-------
 
     private static ArrayList<Double> bestDistances = new ArrayList<>();
     private static ArrayList<Long> bestTimes = new ArrayList<>();
@@ -212,8 +206,6 @@ public class AJE {
                 ThreadToRun.getIterationsFinal()
         );
     }
-
-    //-------------
 
     public static int countOccurrences(ArrayList<Double> array, double target) {
         int count = 0;

@@ -62,9 +62,8 @@ public class TSPSolver {
                     worstTour = tour;
                 }
             }
-        } catch (Exception e) {
-            //Ignore it
-        }
+        } catch (Exception ignored) {}
+
         return worstTour;
     }
 
@@ -85,9 +84,7 @@ public class TSPSolver {
                     break;
                 }
             }
-        } catch (Exception e) {
-            //Ignore it
-        }
+        } catch (Exception ignored) {}
         return newPopulation;
     }
 
