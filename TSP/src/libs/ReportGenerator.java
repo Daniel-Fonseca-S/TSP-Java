@@ -1,5 +1,9 @@
 package libs;
 
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObjectBuilder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,21 +17,21 @@ public class ReportGenerator {
     private static String fileName;
     private static String filePrefix;
     private static int citiesNumber;
-    private static List<Integer> entryMatrix;
+    private static List<List<Integer>> entryMatrix;
     private static final List<Integer> convergedDistances = new ArrayList<>();
-    private static final List<Double> convergedTimes = new ArrayList<>();
+    private static final List<Long> convergedTimes = new ArrayList<>();
     private static final List<List<Integer>> convergedPaths = new ArrayList<>();
-    private static final List<Double> convergedFitnesses = new ArrayList<>();
+    private static final List<Integer> convergedFitnesses = new ArrayList<>();
     private static final List<Integer> convergedGenerations = new ArrayList<>();
     private static int executions;
     private static int threadsOrProcesses;
-    private static float mutationProb;
+    private static double mutationProb;
     private static int optimalSolutions;
     private static double averageConvergedTime;
     private static double maxConvergedTime;
     private static double minConvergedTime;
 
-    public static void setGeneralInfo(String filePrefix, int citiesNumber, List<Integer> entryMatrix, int executions, int threadsOrProcesses, float mutationProb, int optimalSolutions) {
+    public static void setGeneralInfo(String filePrefix, int citiesNumber, List<List<Integer>> entryMatrix, int executions, int threadsOrProcesses, double mutationProb, int optimalSolutions) {
         ReportGenerator.filePrefix = filePrefix;
         ReportGenerator.citiesNumber = citiesNumber;
         ReportGenerator.entryMatrix = entryMatrix;
@@ -39,7 +43,7 @@ public class ReportGenerator {
         ReportGenerator.fileName = filePrefix + "_report_" + dateFormat.format(System.currentTimeMillis()) + ".txt";
     }
 
-    public static void addConvergedInfo(int distance, double time, List<Integer> path, double fitness, int generation) {
+    public static void addConvergedInfo(int distance, long time, List<Integer> path, int fitness, int generation) {
         convergedDistances.add(distance);
         convergedTimes.add(time);
         convergedPaths.add(path);
@@ -48,9 +52,46 @@ public class ReportGenerator {
     }
 
     private static void calculateAverageMaxMinConvergedTime() {
-        ReportGenerator.averageConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-        ReportGenerator.maxConvergedTime = Math.max(convergedTimes.stream().mapToDouble(Double::doubleValue).max().orElse(0.0), 0.0);
-        ReportGenerator.minConvergedTime = Math.min(convergedTimes.stream().mapToDouble(Double::doubleValue).min().orElse(0.0), 0.0);
+        ReportGenerator.averageConvergedTime = convergedTimes.stream().mapToDouble(Long::doubleValue).average().orElse(0.0);
+        ReportGenerator.maxConvergedTime = Math.max(convergedTimes.stream().mapToDouble(Long::doubleValue).max().orElse(0.0), 0.0);
+        ReportGenerator.minConvergedTime = Math.min(convergedTimes.stream().mapToDouble(Long::doubleValue).min().orElse(0.0), 100);
+    }
+
+    private static String generateReportContentJson() {
+        JsonObjectBuilder reportContent = Json.createObjectBuilder();
+        reportContent.add("numberOfCities", ReportGenerator.citiesNumber);
+        reportContent.add("quantityOfThreadsOrProcesses", ReportGenerator.threadsOrProcesses);
+        reportContent.add("mutationProbability", ReportGenerator.mutationProb);
+        reportContent.add("quantityOfExecutions", ReportGenerator.executions);
+
+        JsonArrayBuilder entryMatrixArray = Json.createArrayBuilder();
+        for (List<Integer> row : ReportGenerator.entryMatrix) {
+            JsonArrayBuilder rowArray = Json.createArrayBuilder();
+            for (Integer value : row) {
+                rowArray.add(value);
+            }
+            entryMatrixArray.add(rowArray);
+        }
+        reportContent.add("entryMatrix", entryMatrixArray);
+
+        JsonArrayBuilder convergencesArray = Json.createArrayBuilder();
+        for (int i = 0; i < ReportGenerator.convergedDistances.size(); i++) {
+            JsonObjectBuilder convergence = Json.createObjectBuilder();
+            convergence.add("distance", ReportGenerator.convergedDistances.get(i));
+            convergence.add("time", ReportGenerator.convergedTimes.get(i));
+            convergence.add("path", ReportGenerator.convergedPaths.get(i).toString());
+            convergence.add("fitness", ReportGenerator.convergedFitnesses.get(i));
+            convergence.add("generations", ReportGenerator.convergedGenerations.get(i));
+            convergencesArray.add(convergence);
+        }
+        reportContent.add("convergences", convergencesArray);
+
+        reportContent.add("quantityOfOptimalSolutions", ReportGenerator.optimalSolutions);
+        reportContent.add("averageConvergedTime", ReportGenerator.averageConvergedTime);
+        reportContent.add("maxConvergedTime", ReportGenerator.maxConvergedTime);
+        reportContent.add("minConvergedTime", ReportGenerator.minConvergedTime);
+
+        return reportContent.build().toString();
     }
 
     public static void generateReport() {
@@ -69,6 +110,7 @@ public class ReportGenerator {
         calculateAverageMaxMinConvergedTime();
         try {
             Files.write(Paths.get("reports/" + fileName), generateReportContent().getBytes());
+            Files.write(Paths.get("reports/" + fileName.replace(".txt", ".json")), generateReportContentJson().getBytes());
         } catch (IOException e) {
             System.out.printf("Error to write the report file: %s\n", e.getMessage());
         }
@@ -82,11 +124,10 @@ public class ReportGenerator {
         reportContent.append("Mutation Probability: ").append(ReportGenerator.mutationProb).append("\n");
         reportContent.append("Quantity of Executions: ").append(ReportGenerator.executions).append("\n\n");
         reportContent.append("Entry Matrix:\n");
-        for (int i = 0; i < ReportGenerator.citiesNumber; i++) {
-            for (int j = 0; j < ReportGenerator.citiesNumber; j++) {
-                reportContent.append(String.format("%02d | ", ReportGenerator.entryMatrix.get(i * ReportGenerator.citiesNumber + j)));
+        for (List<Integer> row : ReportGenerator.entryMatrix){
+            for (Integer value : row){
+                reportContent.append(String.format("%02d | ", value));
             }
-            reportContent.append("\n");
         }
         reportContent.append("\n");
         reportContent.append("TSP Results by Convergence:\n");

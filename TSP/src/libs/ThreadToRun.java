@@ -1,5 +1,7 @@
 package libs;
 
+import java.text.DecimalFormat;
+
 public class ThreadToRun extends Thread{
     private final double timePerThread;
     private static double mutationProb;
@@ -22,6 +24,7 @@ public class ThreadToRun extends Thread{
     }
 
     public void run() {
+        System.out.println("Thread started");
         long startTime = System.nanoTime();
         long timeToExec = (long) (timePerThread * 1_000_000_000L);
         for (int i = 1; i <= 1_000_000_000; i++) {
@@ -41,6 +44,10 @@ public class ThreadToRun extends Thread{
         setBestPathFinal(TSPSolver.getBestPath());
         setIterationsFinal(TSPSolver.getIterations());
         setFormattedTimeFinal(TSPSolver.getTime());
+        System.out.println(
+                "Thread finished with distance: " + TSPSolver.getBestDistance() +
+                " and time: " + new DecimalFormat("#0.000").format((double) TSPSolver.getTime() / 1_000_000_000)
+        );
     }
 
     private static double bestDistanceFinal;

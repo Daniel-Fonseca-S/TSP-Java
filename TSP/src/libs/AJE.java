@@ -124,7 +124,7 @@ public class AJE {
 
         String formattedTimeExec = new DecimalFormat("#0.000").format((double) (System.nanoTime() - startTime) / 1_000_000_000);
         System.out.println("\nProgram runned in " + formattedTimeExec + " seconds");
-        List<Integer> matrixList = Arrays.stream(matrix).flatMap(Arrays::stream).collect(Collectors.toList());
+        List<List<Integer>> matrixList = Arrays.stream(matrix).map(Arrays::asList).collect(Collectors.toList());
         ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, 30, threadsNumber, mutationProb, count);
         ReportGenerator.generateReport();
     }
@@ -138,6 +138,8 @@ public class AJE {
     ) {
         long startTime = System.nanoTime();
         double bestDistance = Integer.MAX_VALUE;
+        long bestTime = Long.MAX_VALUE;
+        ThreadToRun bestThread = null;
         ThreadToRun[] threads = new ThreadToRun[threadsNumber];
         for (int i = 0; i < threadsNumber; i++) {
             threads[i] = new ThreadToRun(
@@ -173,13 +175,17 @@ public class AJE {
         final long timeToFormat = ThreadToRun.getFormattedTimeFinal();
         String formattedTimeExec = new DecimalFormat("#0.000000").format((double) timeToFormat / 1_000_000_000);
         for (int i = 0; i < threadsNumber; i++) {
-            if (bestDistance > ThreadToRun.getBestDistanceFinal()) {
-                break;
+            double threadBestDistance = threads[i].getBestDistanceFinal();
+            long threadBestTime = threads[i].getFormattedTimeFinal();
+            if (threadBestDistance < bestDistance || (threadBestDistance == bestDistance && threadBestTime < bestTime)) {
+                bestDistance = threadBestDistance;
+                bestTime = threadBestTime;
+                bestThread = threads[i];
             }
         }
 
-        bestDistances.add(ThreadToRun.getBestDistanceFinal());
-        bestTimes.add(ThreadToRun.getFormattedTimeFinal());
+        bestDistances.add(bestThread.getBestDistanceFinal());
+        bestTimes.add(bestThread.getFormattedTimeFinal());
 
         System.out.println(
                 String.format("%2d", (testNumber + 1)) + "  " +
@@ -200,7 +206,7 @@ public class AJE {
         }
         ReportGenerator.addConvergedInfo(
                 (int) ThreadToRun.getBestDistanceFinal(),
-                (double) timeToFormat / 1_000_000_000,
+                timeToFormat / 1_000_000_000,
                 Arrays.stream(ThreadToRun.getBestPathFinal()).boxed().collect(Collectors.toList()),
                 0,
                 ThreadToRun.getIterationsFinal()
