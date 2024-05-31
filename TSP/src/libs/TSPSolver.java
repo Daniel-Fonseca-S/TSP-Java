@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class TSPSolver {
-    private static double mutationProb;
     private static Integer populationSize;
     private static Integer citiesNumber;
     private static Integer[][] matrix;
@@ -15,10 +14,6 @@ public class TSPSolver {
     private static long execTimeFound;
 
     public static void resetTSPSolver() {
-        mutationProb = 0;
-        populationSize = 0;
-        citiesNumber = 0;
-        matrix = null;
         bestDistance = 0;
         bestPath = null;
         iterations = 0;
@@ -127,13 +122,12 @@ public class TSPSolver {
     }
 
     public static void mainTSPSolver(
-            long execTime,
+            double trueOptimalSolution,
             double mutProb,
             Integer populSize,
             Integer citSize,
             Integer[][] matrixReceive
     ) {
-        mutationProb = mutProb;
         populationSize = populSize;
         citiesNumber = citSize;
         matrix = matrixReceive;
@@ -145,7 +139,6 @@ public class TSPSolver {
         Tour[] population = initPopulation();
         long startTime = System.nanoTime();
         int iterationsTotal = 0;
-        long timeToExec = execTime * 1_000_000_000L;
         long execTimeFound = 0;
         for (int i = 1; i <= 1_000_000_000; i++) {
             if ((i - 1) == populationSize) {
@@ -155,7 +148,7 @@ public class TSPSolver {
             Tour finalWorstTour1 = getWorstTour(population);
             population = selectSecondWorst(population, finalWorstTour1);
             Tour finalWorstTour2 = getWorstTour(population);
-            Object[] pathsPMX = PMX.mainPMX(citiesNumber, finalWorstTour1.path, finalWorstTour2.path, mutationProb);
+            Object[] pathsPMX = PMX.mainPMX(citiesNumber, finalWorstTour1.path, finalWorstTour2.path, mutProb);
 
             double fitnessPMX1 = AJE.calcPath((int[]) pathsPMX[0]);
             double fitnessPMX2 = AJE.calcPath((int[]) pathsPMX[1]);
@@ -175,7 +168,7 @@ public class TSPSolver {
                 }
             }
 
-            if ((System.nanoTime() - startTime) >= timeToExec) {
+            if (bestDistanceFound <= trueOptimalSolution){
                 break;
             }
         }

@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
     private static String fileName;
     private static Integer threadsNumber;
-    private static Integer execTime;
+    private static Integer numberOfConvergences;
     private static Integer populationNumber;
     private static float mutationProb;
 
@@ -37,7 +37,7 @@ public class Main {
         if (params.length == 5 && Float.parseFloat(params[4]) <= 1) {
             fileName = params[0];
             threadsNumber = Integer.valueOf(params[1]);
-            execTime = Integer.valueOf(params[2]);
+            numberOfConvergences = Integer.valueOf(params[2]);
             populationNumber = Integer.valueOf(params[3]);
             mutationProb = Float.parseFloat(params[4]);
 
@@ -45,7 +45,7 @@ public class Main {
 
             return "start";
         } else {
-            System.out.println("> <fileName> <threadsNumber> <execTime> <populationNumber> <mutationProb> (max: 1 (100%))");
+            System.out.println("> <fileName> <threadsNumber> <numberOfConvergences> <populationNumber> <mutationProb> (max: 1 (100%))");
             return "repeat";
         }
     }
@@ -59,7 +59,7 @@ public class Main {
         System.out.println("\n--== General Informations ==--");
         System.out.println("File: " + fileName);
         System.out.println("Number of Threads: " + threadsNumber);
-        System.out.println("(MAX) Execution Time: " + execTime + " second(s)");
+        System.out.println("Number of Convergences: " + numberOfConvergences);
         System.out.println("Population: " + populationNumber);
         System.out.println("Mutation Probability: ( " + (mutationProb * 100) + "% )");
     }
@@ -68,6 +68,7 @@ public class Main {
         long startTime = System.nanoTime();
         showInfoInit();
         AJE.readFromFile(fileName);
-        AJE.start(mutationProb, populationNumber, execTime, threadsNumber, startTime);
+        AJE.start(mutationProb, populationNumber, numberOfConvergences, threadsNumber, startTime);
+        System.exit(0);
     }
 }

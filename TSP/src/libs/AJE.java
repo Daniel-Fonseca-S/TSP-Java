@@ -11,6 +11,7 @@ public class AJE {
     private static Integer citiesNumber;
     private static Integer[][] matrix;
     private static String filePathToShow;
+    private static Double trueOptimalSolution;
 
     public static void resetAJE() {
         citiesNumber = null;
@@ -39,6 +40,7 @@ public class AJE {
         } catch (IOException error) {
             System.err.println("\nError reading the file: " + error.getMessage());
         }
+        readOptimalSolution();
     }
 
     private static void saveInfoFromFile(String line, Integer lineNumber) {
@@ -71,6 +73,21 @@ public class AJE {
                 System.out.print(String.format("%02d", value) + " | ");
             }
             System.out.println();
+        }
+    }
+
+    private static void readOptimalSolution() {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("TSP/files/results.txt"))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] lineDivided = line.split("\\s+");
+                if (lineDivided[0].equals(filePathToShow.replace("TSP/files/", ""))) {
+                    trueOptimalSolution = Double.parseDouble(lineDivided[1]);
+                    break;
+                }
+            }
+        } catch (IOException error) {
+            System.err.println("\nError reading the file: " + error.getMessage());
         }
     }
 
@@ -108,10 +125,12 @@ public class AJE {
     private static ArrayList<Double> bestDistances = new ArrayList<>();
     private static ArrayList<Long> bestTimes = new ArrayList<>();
 
-    public static void start(float mutationProb, Integer populationNumber, Integer execTime, Integer threadsNumber, long startTime) {
+    public static void start(float mutationProb, Integer populationNumber, Integer numberOfConvergences, Integer threadsNumber, long startTime) {
         System.out.println("\n--== Calculate Paths ==--");
-        for (int i = 0; i < 30; i++) {
-            calc(i, threadsNumber, execTime, mutationProb, populationNumber);
+        for (int i = 0; i < numberOfConvergences; i++) {
+            calc(i, threadsNumber, mutationProb, populationNumber);
+            TSPSolver.resetTSPSolver();
+            ThreadToRun.resetTime();
         }
 
         double smallestNumber = findSmallestNumber(bestDistances);
@@ -125,29 +144,25 @@ public class AJE {
         String formattedTimeExec = new DecimalFormat("#0.000").format((double) (System.nanoTime() - startTime) / 1_000_000_000);
         System.out.println("\nProgram runned in " + formattedTimeExec + " seconds");
         List<List<Integer>> matrixList = Arrays.stream(matrix).map(Arrays::asList).collect(Collectors.toList());
-        ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, 30, threadsNumber, mutationProb, count);
+        ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, numberOfConvergences, threadsNumber, mutationProb, count);
         ReportGenerator.generateReport();
     }
 
     private static void calc(
             Integer testNumber,
             Integer threadsNumber,
-            Integer execTime,
             Float mutationProb,
             Integer populationNumber
     ) {
         long startTime = System.nanoTime();
-        double bestDistance = Integer.MAX_VALUE;
-        long bestTime = Long.MAX_VALUE;
-        ThreadToRun bestThread = null;
         ThreadToRun[] threads = new ThreadToRun[threadsNumber];
         for (int i = 0; i < threadsNumber; i++) {
             threads[i] = new ThreadToRun(
-                    execTime,
                     mutationProb,
                     populationNumber,
                     citiesNumber,
-                    matrix
+                    matrix,
+                    trueOptimalSolution
             );
             threads[i].start();
         }
@@ -174,18 +189,9 @@ public class AJE {
         String formattedTime = new DecimalFormat("#0.000").format(((double) execTimeTotal / 1_000_000_000));
         final long timeToFormat = ThreadToRun.getFormattedTimeFinal();
         String formattedTimeExec = new DecimalFormat("#0.000000").format((double) timeToFormat / 1_000_000_000);
-        for (int i = 0; i < threadsNumber; i++) {
-            double threadBestDistance = threads[i].getBestDistanceFinal();
-            long threadBestTime = threads[i].getFormattedTimeFinal();
-            if (threadBestDistance < bestDistance || (threadBestDistance == bestDistance && threadBestTime < bestTime)) {
-                bestDistance = threadBestDistance;
-                bestTime = threadBestTime;
-                bestThread = threads[i];
-            }
-        }
 
-        bestDistances.add(bestThread.getBestDistanceFinal());
-        bestTimes.add(bestThread.getFormattedTimeFinal());
+        bestDistances.add(ThreadToRun.getBestDistanceFinal());
+        bestTimes.add(ThreadToRun.getFormattedTimeFinal());
 
         System.out.println(
                 String.format("%2d", (testNumber + 1)) + "  " +
@@ -206,7 +212,7 @@ public class AJE {
         }
         ReportGenerator.addConvergedInfo(
                 (int) ThreadToRun.getBestDistanceFinal(),
-                timeToFormat / 1_000_000_000,
+                ThreadToRun.getFormattedTimeFinal(),
                 Arrays.stream(ThreadToRun.getBestPathFinal()).boxed().collect(Collectors.toList()),
                 0,
                 ThreadToRun.getIterationsFinal()

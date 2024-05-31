@@ -19,7 +19,7 @@ public class ReportGenerator {
     private static int citiesNumber;
     private static List<List<Integer>> entryMatrix;
     private static final List<Integer> convergedDistances = new ArrayList<>();
-    private static final List<Long> convergedTimes = new ArrayList<>();
+    private static final List<Double> convergedTimes = new ArrayList<>();
     private static final List<List<Integer>> convergedPaths = new ArrayList<>();
     private static final List<Integer> convergedFitnesses = new ArrayList<>();
     private static final List<Integer> convergedGenerations = new ArrayList<>();
@@ -45,16 +45,16 @@ public class ReportGenerator {
 
     public static void addConvergedInfo(int distance, long time, List<Integer> path, int fitness, int generation) {
         convergedDistances.add(distance);
-        convergedTimes.add(time);
+        convergedTimes.add((double) time / 1_000_000_000);
         convergedPaths.add(path);
         convergedFitnesses.add(fitness);
         convergedGenerations.add(generation);
     }
 
     private static void calculateAverageMaxMinConvergedTime() {
-        ReportGenerator.averageConvergedTime = convergedTimes.stream().mapToDouble(Long::doubleValue).average().orElse(0.0);
-        ReportGenerator.maxConvergedTime = Math.max(convergedTimes.stream().mapToDouble(Long::doubleValue).max().orElse(0.0), 0.0);
-        ReportGenerator.minConvergedTime = Math.min(convergedTimes.stream().mapToDouble(Long::doubleValue).min().orElse(0.0), 100);
+        ReportGenerator.averageConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+        ReportGenerator.maxConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).max().orElse(0);
+        ReportGenerator.minConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).min().orElse(0);
     }
 
     private static String generateReportContentJson() {
