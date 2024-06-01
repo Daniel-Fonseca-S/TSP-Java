@@ -8,7 +8,7 @@ This Java-based project is part of an experiment to evaluate the parallel perfor
 
 ## Project details 🚀
 
-This project was based of TSP-Java from Miguel Rôlo. The main goal of this fork is to adapt the original project to bea able to generate reports for a performance analysis between parallel capabilities in different programming languages. Comparing the performance of the Java version with the Python version.
+This project was based of TSP-Java from Miguel Rôlo. The main goal of this fork is to adapt the original project to be able to generate reports for a performance analysis between parallel capabilities in different programming languages. Comparing the performance of the Java version with the Python version.
 
 ---
 
@@ -24,7 +24,7 @@ To generate the reports [jakarta.json](https://mvnrepository.com/artifact/jakart
 
 ### 1 - Multithreading
 
-The solution utilizes multithreading to concurrently explore different paths in the solution space, improving the overall efficiency of the algorithm. This enables the program to explore multiple potential solutions simultaneously, leading to faster convergence towards an optimal or near-optimal solution.
+The solution utilizes Java multithreading to parallelly explore different paths in the solution space, improving the overall efficiency of the algorithm. This enables the program to explore multiple potential solutions simultaneously, leading to faster convergence towards the optimal solution.
 
 ### 2 - PMX Crossover
 
