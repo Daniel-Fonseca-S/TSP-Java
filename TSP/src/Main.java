@@ -12,9 +12,12 @@ public class Main {
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
+            label:
             while (true) {
-                if (requestParams(scanner).equalsIgnoreCase("over")) {
-                    break;
+                String status = requestParams(scanner);
+                switch (status) {
+                    case "over", "start":
+                        break label;
                 }
             }
         } catch (Exception e) {

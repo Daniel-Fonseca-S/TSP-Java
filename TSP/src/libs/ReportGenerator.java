@@ -39,8 +39,7 @@ public class ReportGenerator {
         ReportGenerator.threadsOrProcesses = threadsOrProcesses;
         ReportGenerator.mutationProb = mutationProb;
         ReportGenerator.optimalSolutions = optimalSolutions;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        ReportGenerator.fileName = filePrefix + "_report_" + dateFormat.format(System.currentTimeMillis()) + ".txt";
+        ReportGenerator.fileName = filePrefix + "_report_" + ".txt";
     }
 
     public static void addConvergedInfo(int distance, long time, List<Integer> path, int fitness, int generation) {
@@ -52,20 +51,20 @@ public class ReportGenerator {
     }
 
     private static void calculateAverageMaxMinConvergedTime() {
-        ReportGenerator.averageConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).average().orElse(0);
-        ReportGenerator.maxConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).max().orElse(0);
-        ReportGenerator.minConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).min().orElse(0);
+        averageConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+        maxConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).max().orElse(0);
+        minConvergedTime = convergedTimes.stream().mapToDouble(Double::doubleValue).min().orElse(0);
     }
 
     private static String generateReportContentJson() {
         JsonObjectBuilder reportContent = Json.createObjectBuilder();
-        reportContent.add("numberOfCities", ReportGenerator.citiesNumber);
-        reportContent.add("quantityOfThreadsOrProcesses", ReportGenerator.threadsOrProcesses);
-        reportContent.add("mutationProbability", ReportGenerator.mutationProb);
-        reportContent.add("quantityOfExecutions", ReportGenerator.executions);
+        reportContent.add("numberOfCities", citiesNumber);
+        reportContent.add("quantityOfThreadsOrProcesses", threadsOrProcesses);
+        reportContent.add("mutationProbability", mutationProb);
+        reportContent.add("quantityOfExecutions", executions);
 
         JsonArrayBuilder entryMatrixArray = Json.createArrayBuilder();
-        for (List<Integer> row : ReportGenerator.entryMatrix) {
+        for (List<Integer> row : entryMatrix) {
             JsonArrayBuilder rowArray = Json.createArrayBuilder();
             for (Integer value : row) {
                 rowArray.add(value);
@@ -75,27 +74,34 @@ public class ReportGenerator {
         reportContent.add("entryMatrix", entryMatrixArray);
 
         JsonArrayBuilder convergencesArray = Json.createArrayBuilder();
-        for (int i = 0; i < ReportGenerator.convergedDistances.size(); i++) {
+        for (int i = 0; i < convergedDistances.size(); i++) {
             JsonObjectBuilder convergence = Json.createObjectBuilder();
-            convergence.add("distance", ReportGenerator.convergedDistances.get(i));
-            convergence.add("time", ReportGenerator.convergedTimes.get(i));
-            convergence.add("path", ReportGenerator.convergedPaths.get(i).toString());
-            convergence.add("fitness", ReportGenerator.convergedFitnesses.get(i));
-            convergence.add("generations", ReportGenerator.convergedGenerations.get(i));
+            convergence.add("distance", convergedDistances.get(i));
+            convergence.add("time", convergedTimes.get(i));
+            JsonArrayBuilder pathArray = Json.createArrayBuilder();
+            for (Integer value : convergedPaths.get(i)) {
+                pathArray.add(value);
+            }
+            convergence.add("path", pathArray);
+            convergence.add("fitness", convergedFitnesses.get(i));
+            convergence.add("generations", convergedGenerations.get(i));
             convergencesArray.add(convergence);
         }
         reportContent.add("convergences", convergencesArray);
 
-        reportContent.add("quantityOfOptimalSolutions", ReportGenerator.optimalSolutions);
-        reportContent.add("averageConvergedTime", ReportGenerator.averageConvergedTime);
-        reportContent.add("maxConvergedTime", ReportGenerator.maxConvergedTime);
-        reportContent.add("minConvergedTime", ReportGenerator.minConvergedTime);
+        reportContent.add("quantityOfOptimalSolutions", optimalSolutions);
+        reportContent.add("averageConvergedTime", averageConvergedTime);
+        reportContent.add("maxConvergedTime", maxConvergedTime);
+        reportContent.add("minConvergedTime", minConvergedTime);
+        reportContent.add("totalTimeOfThreadsOrProcesses", calculateTotalThreadTime());
 
         return reportContent.build().toString();
     }
 
     public static void generateReport() {
-        Path reports = Paths.get("reports");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String today = dateFormat.format(System.currentTimeMillis());
+        Path reports = Paths.get("reports/" + today);
         if (Files.notExists(reports)) {
             try {
                 Files.createDirectory(reports);
@@ -109,8 +115,8 @@ public class ReportGenerator {
 
         calculateAverageMaxMinConvergedTime();
         try {
-            Files.write(Paths.get("reports/" + fileName), generateReportContent().getBytes());
-            Files.write(Paths.get("reports/" + fileName.replace(".txt", ".json")), generateReportContentJson().getBytes());
+            Files.write(Paths.get("reports/" + today + "/" + fileName), generateReportContent().getBytes());
+            Files.write(Paths.get("reports/" + today + "/" + fileName.replace(".txt", ".json")), generateReportContentJson().getBytes());
         } catch (IOException e) {
             System.out.printf("Error to write the report file: %s\n", e.getMessage());
         }
@@ -118,33 +124,43 @@ public class ReportGenerator {
 
     private static String generateReportContent() {
         StringBuilder reportContent = new StringBuilder();
-        reportContent.append("Detailed Report of the TSP Algorithm using").append(ReportGenerator.filePrefix).append("\n\n");
-        reportContent.append("Number of Cities: ").append(ReportGenerator.citiesNumber).append("\n");
-        reportContent.append("Quantity of Threads/Processes: ").append(ReportGenerator.threadsOrProcesses).append("\n");
-        reportContent.append("Mutation Probability: ").append(ReportGenerator.mutationProb).append("\n");
-        reportContent.append("Quantity of Executions: ").append(ReportGenerator.executions).append("\n\n");
+        reportContent.append("Detailed Report of the TSP Algorithm using").append(filePrefix).append("\n\n");
+        reportContent.append("Number of Cities: ").append(citiesNumber).append("\n");
+        reportContent.append("Quantity of Threads/Processes: ").append(threadsOrProcesses).append("\n");
+        reportContent.append("Mutation Probability: ").append(mutationProb).append("\n");
+        reportContent.append("Quantity of Executions: ").append(executions).append("\n\n");
         reportContent.append("Entry Matrix:\n");
-        for (List<Integer> row : ReportGenerator.entryMatrix){
+        for (List<Integer> row : entryMatrix){
             for (Integer value : row){
-                reportContent.append(String.format("%02d | ", value));
+                reportContent.append(String.format("%03d | ", value));
             }
+            reportContent.append("\n");
         }
         reportContent.append("\n");
         reportContent.append("TSP Results by Convergence:\n");
-        for (int i = 0; i < ReportGenerator.convergedDistances.size(); i++) {
+        for (int i = 0; i < convergedDistances.size(); i++) {
             reportContent.append("Convergence ").append(i + 1).append(":\n");
-            reportContent.append("Distance: ").append(ReportGenerator.convergedDistances.get(i)).append("\n");
-            reportContent.append("Time: ").append(ReportGenerator.convergedTimes.get(i)).append("\n");
-            reportContent.append("Path: ").append(ReportGenerator.convergedPaths.get(i)).append("\n");
-            reportContent.append("Fitness: ").append(ReportGenerator.convergedFitnesses.get(i)).append("\n");
-            reportContent.append("Generations: ").append(ReportGenerator.convergedGenerations.get(i)).append("\n\n");
+            reportContent.append("Distance: ").append(convergedDistances.get(i)).append("\n");
+            reportContent.append("Time: ").append(convergedTimes.get(i)).append("\n");
+            reportContent.append("Path: ").append(convergedPaths.get(i)).append("\n");
+            reportContent.append("Fitness: ").append(convergedFitnesses.get(i)).append("\n");
+            reportContent.append("Generations: ").append(convergedGenerations.get(i)).append("\n\n");
         }
-        reportContent.append("Quantity of Optimal Solutions: ").append(ReportGenerator.optimalSolutions).append("\n\n");
-        reportContent.append("Average Converged Time: ").append(ReportGenerator.averageConvergedTime).append("\n");
-        reportContent.append("Max Converged Time: ").append(ReportGenerator.maxConvergedTime).append("\n");
-        reportContent.append("Min Converged Time: ").append(ReportGenerator.minConvergedTime).append("\n\n");
+        reportContent.append("Quantity of Optimal Solutions: ").append(optimalSolutions).append("\n\n");
+        reportContent.append("Average Converged Time: ").append(averageConvergedTime).append("\n");
+        reportContent.append("Max Converged Time: ").append(maxConvergedTime).append("\n");
+        reportContent.append("Min Converged Time: ").append(minConvergedTime).append("\n\n");
+        reportContent.append("Total Time of Threads/Processes: ").append(calculateTotalThreadTime()).append("\n\n");
         reportContent.append("End of Report");
-        System.out.printf("Report generated in the reports folder with the name: %s\n", ReportGenerator.fileName);
+        System.out.printf("\nReport generated in the reports folder with the name: %s\n", fileName);
         return reportContent.toString();
+    }
+
+    public static double calculateTotalThreadTime() {
+        double totalThreadTime = 0;
+        for (double time : convergedTimes) {
+            totalThreadTime += time;
+        }
+        return totalThreadTime;
     }
 }
