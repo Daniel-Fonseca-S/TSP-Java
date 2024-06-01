@@ -2,13 +2,13 @@
 
 ## Overview 🔍
 
-This Java-based project aims to solve the **Traveling Salesman Problem (TSP)** using a parallelized approach with multithreading and the Partially Mapped Crossover (PMX) technique. The TSP is a classic optimization problem where the goal is to find the most efficient route that visits a set of cities exactly once and returns to the starting city.
+This Java-based project is part of an experiment to evaluate the parallel performance between Java and Python programming languages, using an algorithm that aims to solve the **Traveling Salesman Problem (TSP)** with a multithreaded parallelized approach and the Partially Mapped Crossover (PMX) technique. The TSP is a classic optimization problem where the goal is to find the most efficient route that visits a set of cities exactly once and returns to the starting city.
 
 ---
 
-## Fork objectives 🚀
+## Project details 🚀
 
-The main goal of this fork is to adapt the original project to bea able to generate reports for a performance analysis between parallel capabilities in different programming languages. The main goal is to compare the performance of the Java version with the Python version.
+This project was based of TSP-Java from Miguel Rôlo. The main goal of this fork is to adapt the original project to bea able to generate reports for a performance analysis between parallel capabilities in different programming languages. Comparing the performance of the Java version with the Python version.
 
 ---
 
@@ -16,6 +16,7 @@ The main goal of this fork is to adapt the original project to bea able to gener
 
 To run the project, you need to have Java SDK 21 installed on your machine. You can download it [here](https://www.oracle.com/java/technologies/downloads/#java21).
 After that, you can run the main class ```Main.java```.
+To generate the reports [jakarta.json](https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api/2.1.3) dependencies are needed
 
 ---
 
@@ -37,9 +38,13 @@ The genetic algorithm incorporates a mutation mechanism with adjustable probabil
 
 The genetic algorithm maintains a population of potential solutions, evolving them over generations. A diverse population helps the algorithm explore a broader solution space. Users can configure the size of the population based on the characteristics of the TSP instance, allowing for flexibility in handling different problem complexities.
 
-### 5 - Max Time of Execution
+### 5 - Convergence Analysis
 
-To control the execution time of the algorithm, a maximum time parameter is provided. This ensures that the algorithm terminates gracefully even if an optimal solution is not found within a specified timeframe. Users can set this parameter to meet specific time constraints, making the solution adaptable to different scenarios.
+The program performs multiple runs to evaluate the convergence behavior of the algorithm. By executing the algorithm multiple times, users can observe the consistency of the results and analyze the convergence trends. This feature provides insights into the algorithm's performance and robustness across different runs.
+
+### 6 - Report Generation
+
+The program generates detailed reports summarizing the results of the TSP solver. These reports include information about the best solution found, the convergence behavior, and the execution time. Users can analyze these reports to assess the algorithm's performance and compare different configurations or problem instances.
 
 ---
 
@@ -61,19 +66,21 @@ To execute the TSP solver you need to fill the following parameters:
 |           Param           | Example  |                       Description                        |
 |:-------------------------:|:--------:|:--------------------------------------------------------:| 
 |      ```fileName```       | ex13.txt | Already gets from "files" folder, just put the file name |
-|    ```threadsNumber```    |    4     |                                                          |
-|     ```maxExecTime```     |    60    |                        in seconds                        |
-|  ```populationNumber```   |   100    |                                                          |
+|    ```threadsNumber```    |    4     |         Number of Threads to execute the program         |
+| ```numberOfExecutions```  |    30    |                  Number of convergences                  |
+|  ```populationNumber```   |   100    |                     Population size                      |
 | ```mutationProbability``` |   0.01   |                      from 0.01 to 1                      |
 
 Final Result:
 ```Java
->  <fileName> <threadsNumber> <maxExecTime> <populationNumber> <mutationProbability> 
+>  <fileName> <threadsNumber> <numberOfExecutions> <populationNumber> <mutationProbability>
 ```
 Example
 ```Java
->  ex13.txt 4 60 100 0.01 
+>  ex13.txt 4 30 100 0.01 
 ```
+
+---
 
 ### Results
 |   File    | Best distance |
@@ -97,12 +104,16 @@ Example
 | dantzig42 |      699      |
 |   att48   |     33523     |
 
+---
+
+### Reports
+The reports are generated in the ```reports``` folder, as a ```.txt```  and ```.json``` files.
 
 ---
 
 ## Author 🤝
 
-> This project was forked from Miguel Rolo's TSP project and adapted by me.
+> This project was based on [Miguel Rolo's TSP project](https://github.com/MiguelRolo/TSP) and adapted by me.
 
 ---
 
