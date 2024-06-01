@@ -132,7 +132,7 @@ public class ReportGenerator {
         reportContent.append("Entry Matrix:\n");
         for (List<Integer> row : entryMatrix){
             for (Integer value : row){
-                reportContent.append(String.format("%03d | ", value));
+                reportContent.append(String.format("%04d | ", value));
             }
             reportContent.append("\n");
         }

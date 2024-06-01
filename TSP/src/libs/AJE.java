@@ -70,7 +70,7 @@ public class AJE {
         System.out.println("\n- Matrix -");
         for (Integer[] row : matrix) {
             for (Integer value : row) {
-                System.out.print(String.format("%03d", value) + " | ");
+                System.out.print(String.format("%04d", value) + " | ");
             }
             System.out.println();
         }
