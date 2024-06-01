@@ -93,7 +93,7 @@ public class ReportGenerator {
         reportContent.add("averageConvergedTime", averageConvergedTime);
         reportContent.add("maxConvergedTime", maxConvergedTime);
         reportContent.add("minConvergedTime", minConvergedTime);
-        reportContent.add("totalTimeOfThreadsOrProcesses", calculateTotalThreadTime());
+        reportContent.add("totalTimeOfThreadsOrProcesses", calculateTotalParallelTime());
 
         return reportContent.build().toString();
     }
@@ -150,13 +150,13 @@ public class ReportGenerator {
         reportContent.append("Average Converged Time: ").append(averageConvergedTime).append("\n");
         reportContent.append("Max Converged Time: ").append(maxConvergedTime).append("\n");
         reportContent.append("Min Converged Time: ").append(minConvergedTime).append("\n\n");
-        reportContent.append("Total Time of Threads/Processes: ").append(calculateTotalThreadTime()).append("\n\n");
+        reportContent.append("Total Time of Threads/Processes: ").append(calculateTotalParallelTime()).append("\n\n");
         reportContent.append("End of Report");
         System.out.printf("\nReport generated in the reports folder with the name: %s\n", fileName);
         return reportContent.toString();
     }
 
-    public static double calculateTotalThreadTime() {
+    public static double calculateTotalParallelTime() {
         double totalThreadTime = 0;
         for (double time : convergedTimes) {
             totalThreadTime += time;

@@ -143,7 +143,7 @@ public class AJE {
 
         String formattedTimeExec = new DecimalFormat("#0.000").format((double) (System.nanoTime() - startTime) / 1_000_000_000);
         System.out.println("\nProgram runned in " + formattedTimeExec + " seconds");
-        System.out.println("Total Paralel execution Time " + ReportGenerator.calculateTotalThreadTime() + " seconds");
+        System.out.println("Total parallel execution time " + ReportGenerator.calculateTotalParallelTime() + " seconds");
         List<List<Integer>> matrixList = Arrays.stream(matrix).map(Arrays::asList).collect(Collectors.toList());
         ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, numberOfConvergences, threadsNumber, mutationProb, count);
         ReportGenerator.generateReport();
