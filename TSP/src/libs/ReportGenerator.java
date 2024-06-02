@@ -124,11 +124,11 @@ public class ReportGenerator {
 
     private static String generateReportContent() {
         StringBuilder reportContent = new StringBuilder();
-        reportContent.append("Detailed Report of the TSP Algorithm using").append(filePrefix).append("\n\n");
+        reportContent.append("Detailed Report of the TSP Algorithm using ").append(filePrefix).append("\n\n");
         reportContent.append("Number of Cities: ").append(citiesNumber).append("\n");
         reportContent.append("Quantity of Threads/Processes: ").append(threadsOrProcesses).append("\n");
         reportContent.append("Mutation Probability: ").append(mutationProb).append("\n");
-        reportContent.append("Quantity of Executions: ").append(executions).append("\n\n");
+        reportContent.append("Quantity of Executions: ").append(executions).append("\n");
         reportContent.append("Entry Matrix:\n");
         for (List<Integer> row : entryMatrix){
             for (Integer value : row){
@@ -146,10 +146,10 @@ public class ReportGenerator {
             reportContent.append("Fitness: ").append(convergedFitnesses.get(i)).append("\n");
             reportContent.append("Generations: ").append(convergedGenerations.get(i)).append("\n\n");
         }
-        reportContent.append("Quantity of Optimal Solutions: ").append(optimalSolutions).append("\n\n");
+        reportContent.append("Quantity of Optimal Solutions: ").append(optimalSolutions).append("\n");
         reportContent.append("Average Converged Time: ").append(averageConvergedTime).append("\n");
         reportContent.append("Max Converged Time: ").append(maxConvergedTime).append("\n");
-        reportContent.append("Min Converged Time: ").append(minConvergedTime).append("\n\n");
+        reportContent.append("Min Converged Time: ").append(minConvergedTime).append("\n");
         reportContent.append("Total Time of Threads/Processes: ").append(calculateTotalParallelTime()).append("\n\n");
         reportContent.append("End of Report");
         System.out.printf("\nReport generated in the reports folder with the name: %s\n", fileName);
