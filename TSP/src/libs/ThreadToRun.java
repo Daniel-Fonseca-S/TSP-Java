@@ -77,6 +77,17 @@ public class ThreadToRun extends Thread {
             if (TSPSolver.getBestDistance() <= trueOptimalSolution) {
                 break;
             }
+
+            if (System.nanoTime() - startTime >= 900_000_000_000L) {
+                if (!TSPSolver.solutionFound) {
+                    TSPSolver.resetTSPSolver();
+                    startTime = System.nanoTime();
+                    System.err.println("Thread restarting due to timeout with no results");
+                } else {
+                    System.err.println("Thread timed out");
+                    break;
+                }
+            }
         }
         long totalTime = System.nanoTime() - startTime;
 

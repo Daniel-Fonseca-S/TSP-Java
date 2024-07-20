@@ -142,7 +142,7 @@ public class AJE {
         System.out.println("Optimal found " + count + " times \t Average = " + average + " \t Std Dev = " + stdDevFormatted);
 
         String formattedTimeExec = new DecimalFormat("#0.000").format((double) (System.nanoTime() - startTime) / 1_000_000_000);
-        System.out.println("\nProgram runned in " + formattedTimeExec + " seconds");
+        System.out.println("\nProgram ran in " + formattedTimeExec + " seconds");
         System.out.println("Total parallel execution time " + ReportGenerator.calculateTotalParallelTime() + " seconds");
         List<List<Integer>> matrixList = Arrays.stream(matrix).map(Arrays::asList).collect(Collectors.toList());
         ReportGenerator.setGeneralInfo("java-multithreading", citiesNumber, matrixList, numberOfConvergences, threadsNumber, mutationProb, count);
@@ -158,6 +158,7 @@ public class AJE {
         long startTime = System.nanoTime();
         ThreadToRun[] threads = new ThreadToRun[threadsNumber];
         for (int i = 0; i < threadsNumber; i++) {
+            TSPSolver.solutionFound = false;
             threads[i] = new ThreadToRun(
                     mutationProb,
                     populationNumber,

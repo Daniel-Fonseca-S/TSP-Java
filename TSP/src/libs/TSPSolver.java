@@ -13,6 +13,8 @@ public class TSPSolver {
     private static Integer iterations;
     private static long execTimeFound;
 
+    public static boolean solutionFound = false;
+
     public static void resetTSPSolver() {
         bestDistance = 0;
         bestPath = null;
@@ -169,6 +171,12 @@ public class TSPSolver {
             }
 
             if (bestDistanceFound <= trueOptimalSolution){
+                solutionFound = true;
+                break;
+            }
+
+            if(System.nanoTime() - startTime >= 900_000_000_000L){
+                System.err.println("TSP solver timed out");
                 break;
             }
         }
